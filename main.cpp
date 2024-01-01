@@ -2,12 +2,13 @@
 #include <ctype.h>
 #include <fstream>
 #include<string>
+#include <vector>
 
 int readAndCaliber(std::ifstream& inFile);
 
 int main() {
 	int calibrationVal;
-	std::ifstream inFile("inputTest.txt");
+	std::ifstream inFile("input.txt");
 	if (!inFile.is_open()) {
 		std::cout << "File could not open, exiting code";
 		exit(0);
@@ -19,7 +20,8 @@ int main() {
 }
 
 int readAndCaliber(std::ifstream& inFile) {
-	int firstNumber, lastNumber, combined;
+	int firstNumber, lastNumber, combined, sum=0;
+	std::vector<int> numbers;
 
 	while (!inFile.eof()) {
 		firstNumber = NULL;
@@ -31,7 +33,6 @@ int readAndCaliber(std::ifstream& inFile) {
 		while (line[i]!=NULL && i<100) {
 
 			if (isdigit(line[i])) {
-				//std::cout << line[i] << std::endl;
 				if (firstNumber == NULL) {
 					firstNumber = int(line[i]) - 48;
 				}
@@ -46,7 +47,13 @@ int readAndCaliber(std::ifstream& inFile) {
 		}
 
 		combined = (firstNumber * 10) + lastNumber;
-		std::cout << "\n" << combined;
+		numbers.push_back(combined);
 		}
+		 
+	  for (int i = 0; i < numbers.size(); i++) {
+        sum += numbers[i];
+    }
+
+		std::cout<<"\n"<<sum;
 	return 0;
 }
