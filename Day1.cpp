@@ -28,14 +28,14 @@ int readAndCaliber(std::ifstream& inFile) {
 	while (!inFile.eof()) {
 		firstNumber = NULL;
 		lastNumber = NULL;
-		int i = 0;
+		int i = 0, j=0;
 		int letterCounter=0;
 		char line[100];
 		std::string numberWord = "";
 		inFile.getline(line,100);
 
 		while (line[i]!=NULL && i<100) {
-
+			numberWord="";
 			if (isdigit(line[i])) {
 				if (firstNumber == NULL) {
 					firstNumber = int(line[i]) - 48;
@@ -44,18 +44,28 @@ int readAndCaliber(std::ifstream& inFile) {
 					lastNumber = int(line[i]) -48;
 				}
 			}
+
+
+
+
+
 			else {
-				numberWord += line[i];
-				letterCounter++;
+				j=i;
+			while(line[j]!=NULL && j<(i+5)){
+				numberWord+=line[j];
 				if (checkIfWordNumber(numberWord) != -1) {
-					int j = 0;
-					while (line[j] != NULL && j < 100) {
-						std::cout << line[j];
-						j++;
+					std::cout << numberWord<<"\n";
+					if (firstNumber == NULL) {
+						firstNumber = checkIfWordNumber(numberWord);
 					}
-					std::cout << "\n";
+					else {
+						lastNumber = checkIfWordNumber(numberWord);
+					}
+					i=j;
+					break;
 				}
-				switchAndAssignWord(numberWord, firstNumber, lastNumber, letterCounter);
+				j++;	
+			}
 
 			}
 
@@ -66,6 +76,8 @@ int readAndCaliber(std::ifstream& inFile) {
 		if (lastNumber == NULL) {
 			lastNumber = firstNumber;
 		}
+				std::cout << firstNumber << "\n";
+						std::cout << lastNumber << "\n";
 		combined = (firstNumber * 10) + lastNumber;
 		std::cout << combined << "\n";
 		numbers.push_back(combined);
@@ -75,8 +87,7 @@ int readAndCaliber(std::ifstream& inFile) {
         sum += numbers[i];
     }
 
-		std::cout<<"\n"<<sum;
-	return 0;
+	return sum;
 }
 int checkIfWordNumber(std::string word) {
 	if (word == "one") {
@@ -113,41 +124,4 @@ int checkIfWordNumber(std::string word) {
 		return -1;
 	}
 
-}
-void switchAndAssignWord(std::string & numberWord, int & firstNumber, int & lastNumber,	int & letterCounter) {
-	switch (letterCounter) {
-	case 3:
-	case 4:
-		if (checkIfWordNumber(numberWord) != -1) {
-			std::cout << numberWord << "\n";
-			if (firstNumber == NULL) {
-				firstNumber = checkIfWordNumber(numberWord);
-			}
-			else {
-				lastNumber = checkIfWordNumber(numberWord);
-			}
-			std::cout << checkIfWordNumber(numberWord) << "\n";
-			letterCounter = 0;
-			numberWord = "";
-		}
-		break;
-	case 5:
-		if (checkIfWordNumber(numberWord) != -1) {
-			std::cout << numberWord << "\n";
-			if (firstNumber == NULL) {
-				firstNumber = checkIfWordNumber(numberWord);
-				
-			}
-			else {
-				lastNumber = checkIfWordNumber(numberWord);
-			}
-			std::cout << checkIfWordNumber(numberWord) << "\n";
-			numberWord = "";
-			letterCounter = 0;
-		}
-		else {
-			numberWord = "";
-			letterCounter = 0;
-		}
-	}
 }
