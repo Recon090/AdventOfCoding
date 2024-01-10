@@ -3,14 +3,13 @@
 #include <fstream>
 #include<string>
 #include <vector>
+#include "includes/checkWord.cpp"
 
 int readAndCaliber(std::ifstream& inFile);
-int checkIfWordNumber(std::string word);
-void switchAndAssignWord(std::string &numberWord,int& firstNumber,int& lastNumber,int& letterCounter);
 
 int main() {
 	int calibrationVal;
-	std::ifstream inFile("input.txt");
+	std::ifstream inFile("inputTest.txt");
 	if (!inFile.is_open()) {
 		std::cout << "File could not open, exiting code";
 		exit(0);
@@ -22,58 +21,73 @@ int main() {
 }
 
 int readAndCaliber(std::ifstream& inFile) {
-	int firstNumber, lastNumber, combined, sum=0;
-	std::vector<int> numbers;
+	int firstNumber;
+	int lastNumber;
+	int combined;
+	int sum=0;
+	int z = 0, j=0;
+	std::string numberWord,temp;
+	std::vector<char> line;
 
 	while (!inFile.eof()) {
-		firstNumber = NULL;
-		lastNumber = NULL;
-		int i = 0, j=0;
-		int letterCounter=0;
-		char line[100];
-		std::string numberWord = "";
-		inFile.getline(line,100);
+		firstNumber = 0;
+		lastNumber = 0;
+		std::getline(inFile, temp);
+		line = getVector(temp);
 
-		while (line[i]!=NULL && i<100) {
+		
+		if(firstNumber==0){
+			for(int i=0;i<line.size();i++){
 			numberWord="";
 			if (isdigit(line[i])) {
-				if (firstNumber == NULL) {
 					firstNumber = int(line[i]) - 48;
-				}
-				else {
-					lastNumber = int(line[i]) -48;
-				}
+					break;
 			}
-
-
-
-
-
 			else {
 				j=i;
 			while(line[j]!=NULL && j<(i+5)){
 				numberWord+=line[j];
 				if (checkIfWordNumber(numberWord) != -1) {
-					std::cout << numberWord<<"\n";
-					if (firstNumber == NULL) {
+						std::cout << numberWord<<"\n";
 						firstNumber = checkIfWordNumber(numberWord);
+						break;
+				}
+					j++;	
 					}
-					else {
-						lastNumber = checkIfWordNumber(numberWord);
-					}
-					i=j;
+			}
+			z=i;
+			if(firstNumber!=0){
+					break;
+			}
+			}
+		}else{
+			for(int i=line.size();i>z;--i){
+			numberWord="";
+			if (isdigit(line[i])) {	
+					lastNumber = int(line[i]) - 48;
+			}
+			else {
+				j=i;
+			while(line[j]!=NULL && j<(i+5)){
+				numberWord+=line[j];
+				temp = reverseWord(numberWord);
+				if (checkIfWordNumber(temp) != -1) {
+					lastNumber = checkIfWordNumber(temp);
 					break;
 				}
 				j++;	
 			}
 
 			}
-
-			i++;
+				if(firstNumber!=0){
+					break;
+				}
+			}
 		}
 
 
-		if (lastNumber == NULL) {
+
+		if (lastNumber == 0) {
 			lastNumber = firstNumber;
 		}
 				std::cout << firstNumber << "\n";
@@ -89,39 +103,4 @@ int readAndCaliber(std::ifstream& inFile) {
 
 	return sum;
 }
-int checkIfWordNumber(std::string word) {
-	if (word == "one") {
-		return 1;
-	}
-	else if (word == "two") {
-		return 2;
-	}
-	else if (word == "three") {
-		return 3;
-	}
-	else if (word == "four") {
-		return 4;
-	}
-	else if (word == "five") {
-		return 5;
-	}
-	else if (word == "six") {
-		return 6;
-	}
-	else if (word == "seven") {
-		return 7;
-	}
-	else if (word == "eight") {
-		return 8;
-	}
-	else if (word == "nine") {
-		return 9;
-	}
-	else if (word == "zero") {
-		return 0;
-	}
-	else {
-		return -1;
-	}
 
-}
