@@ -1,13 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 std::string reverseWord(const std::string &str){
-  std::string reversed;
-  for (int i = str.length() - 1; i >= 0; --i) {
+  std::string reversed= "";
+  for (int i = str.length() - 1; i >= 0; i--) {
       reversed += str[i];
   }
-  std::cout<<"This runs"<<std::endl;
   return reversed;
 }
 
@@ -42,6 +42,9 @@ int checkIfWordNumber(std::string word) {
 	}
 	else if (word == "nine") {
 		return 9;
+	}
+	else if (word == "zero") {
+		return 0;
 	}
 	else {
 		return -1;
